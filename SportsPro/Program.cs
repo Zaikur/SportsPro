@@ -32,6 +32,7 @@ app.UseRouting();
 
 app.UseAuthorization();
 
+//Map route for the admin area
 app.MapControllerRoute(
     name: "admin",
     pattern: "Admin/{controller=Home}/{action=Index}/{id?}",
