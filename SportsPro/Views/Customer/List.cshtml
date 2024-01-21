@@ -1,0 +1,45 @@
+﻿@*
+    Quinton Nelson
+    1/21/2024
+    Page to List all current customers from the database
+*@
+
+
+@model List<Customer>
+@{
+    string title = "Customer Manager";
+    ViewData["Title"] = title;
+}
+
+<h1>@ViewData["Title"]</h1>
+<div>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>City</th>
+                <th></th>
+                <th></th>
+        </thead>
+        <tbody>
+            @foreach (var customer in Model)
+            {
+                <tr>
+                    <td>@customer.FullName</td>
+                    <td>@customer.Email</td>
+                    <td>@customer.City</td>
+                    <td>
+                        <a class="btn btn-primary" asp-action="Edit"
+                           asp-route-id="@customer.CustomerID">Edit</a>
+                    </td>
+                    <td>
+                        <a class="btn btn-primary" asp-action="Delete"
+                           asp-route-id="@customer.CustomerID">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <a asp-action="Add" class="btn btn-primary">Add Customer</a>
+</div>

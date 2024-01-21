@@ -1,0 +1,45 @@
+﻿@*
+    Quinton Nelson
+    1/21/2024
+    Page to List all current technicians from the database
+*@
+
+
+@model List<Technician>
+@{
+    string title = "Customer Manager";
+    ViewData["Title"] = title;
+}
+
+<h1>@ViewData["Title"]</h1>
+<div>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th></th>
+                <th></th>
+        </thead>
+        <tbody>
+            @foreach (var customer in Model)
+            {
+                <tr>
+                    <td>@customer.Name</td>
+                    <td>@customer.Email</td>
+                    <td>@customer.Phone</td>
+                    <td>
+                        <a class="btn btn-primary" asp-action="Edit"
+                           asp-route-id="@customer.TechnicianID">Edit</a>
+                    </td>
+                    <td>
+                        <a class="btn btn-primary" asp-action="Delete"
+                           asp-route-id="@customer.TechnicianID">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <a asp-action="Add" class="btn btn-primary">Add Technician</a>
+</div>

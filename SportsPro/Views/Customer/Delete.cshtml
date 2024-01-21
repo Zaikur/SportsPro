@@ -1,0 +1,20 @@
+﻿@*
+    Quinton Nelson
+    1/21/2024
+    Page to confirm delete of a customer
+*@
+@model Customer
+@{
+    string title = "Confirm Deletion";
+    ViewData["Title"] = title;
+}
+
+<h1>@ViewData["Title"]</h1>
+<h3>@Model.FullName</h3>
+<br />
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="CustomerID" />
+    <button type="submit" class="btn btn-primary">Delete</button>
+    <a asp-action="List" class="btn btn-primary">Cancel</a>
+</form>
