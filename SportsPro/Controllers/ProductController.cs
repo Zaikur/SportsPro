@@ -1,4 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿/*
+ * Jason Nelson
+ * 01/19/2024
+ * Controller for the product portion of the SportsPro application
+ */
+
+
+using Microsoft.AspNetCore.Mvc;
 using SportsPro.Models;
 
 namespace SportsPro.Controllers

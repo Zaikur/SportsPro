@@ -1,4 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿/* 
+ * Jason Nelson
+ * 01/19/2024
+ * Product model to validate data
+ */
+
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SportsPro.Models
