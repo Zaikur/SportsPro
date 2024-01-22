@@ -16,6 +16,11 @@ namespace SportsPro.Controllers
 
         public ProductController(SportsProContext ctx) => context = ctx;
 
+        public IActionResult Index()
+        {
+            return RedirectToAction("List");
+        }
+
         public IActionResult List()
         {
             var products = context.Products.OrderBy(p => p.ReleaseDate).ToList();
