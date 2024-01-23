@@ -1,0 +1,17 @@
+﻿@*
+    Ayden Hofts
+    01/22/2024
+    This is the delete view to delete all incident
+*@
+@model Incident
+@{
+    ViewData["Title"] = "Delete Incident";
+}
+
+<h2>Confirm Deletion</h2>
+<h3>@Model.Title</h3>
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="IncidentID" />
+    <button type="submit" class="btn btn-primary">Delete</button>
+    <a asp-controller="Incident" asp-action="List" class="btn btn-primary">Cancel</a>
+</form>

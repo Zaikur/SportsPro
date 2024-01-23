@@ -1,0 +1,48 @@
+﻿@*
+    Ayden Hofts
+    01/22/2024
+    This is the list view to display all current incidents.
+*@
+
+@model List<Incident>
+@{
+    ViewData["Title"] = "Incident Manager";
+}
+
+<h1>Incident Manager</h1>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Customer</th>
+            <th>Product</th>
+            <th>Date Opened</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var incident in Model)
+        {
+            <tr>
+                <td>@incident.Title</td>
+                <td>@incident.Customer</td>
+                <td>@incident.Product</td>
+                <td>@incident.DateOpened.ToString("d")</td>
+                <td>
+                    <a asp-controller="Incident" asp-action="Edit" class="btn btn-primary"
+                       asp-route-id="@incident.IncidentID">Edit</a>
+                </td>
+                <td>
+                    <a asp-controller="Product" asp-action="Delete" class="btn btn-primary"
+                       asp-route-id="@incident.IncidentID">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="mt-2">
+    <a asp-controller="Incident" asp-action="Add" class="btn btn-primary">Add Incident</a>
+</div>
