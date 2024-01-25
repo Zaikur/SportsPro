@@ -88,7 +88,7 @@ namespace SportsPro.Controllers
 
 
 
-            //Send the lists to the view using the ViewBag
+            //Add the lists to the ViewBag for use in the View on the SelectList methods
             ViewBag.Customers = customers;
             ViewBag.Technicians = technicians;
             ViewBag.Products = products;
