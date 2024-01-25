@@ -122,12 +122,10 @@ namespace SportsPro.Controllers
             else
             {
                 /*Not needed because if the ModelState.IsValid check fails, the same 'Edit' view is returned to the user
-                 *
+                 *Because the view was initially rendered for edititing there is no need to change the Action value as it will remain the same.
                  *-Quinton
                  */
                 //ViewBag.Action = (incident.IncidentID == 0) ? "Add" : "Edit";
-
-                ViewBag.Action = "Save";
 
                 //Also include all necessary lists here
                 ViewBag.Customers = customers;
