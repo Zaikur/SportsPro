@@ -36,14 +36,14 @@
                     Same as above
                 *@
 
-                <td>@incident.Product.Name</td>
+                <td>@incident.Title</td>
                 <td>@incident.DateOpened.ToString("d")</td>
                 <td>
                     <a asp-controller="Incident" asp-action="Edit" class="btn btn-primary"
                        asp-route-id="@incident.IncidentID">Edit</a>
                 </td>
                 <td>
-                    <a asp-controller="Product" asp-action="Delete" class="btn btn-primary"
+                    <a asp-controller="Incident" asp-action="Delete" class="btn btn-primary"
                        asp-route-id="@incident.IncidentID">Delete</a>
                 </td>
             </tr>

@@ -23,12 +23,16 @@
 
             Need to generate a new SelectList for the drop down menu using asp-items
             instead of using ViewBag.Customers directly
+
+            Also the criterea is for the options to be blank, so they either need to be blank
+            or have a prompt like 'Select a Customer' in place of an actual selection on load.
         *@
 
         <div class="form-group">
             <label asp-for="CustomerID">Customer</label>
-            <select asp-for="CustomerID"
-                    asp-items="@(new SelectList(ViewBag.Customers, "CustomerID", "FullName"))"
+            <select asp-for="CustomerID" 
+                asp-items="@(new SelectList(ViewBag.Customers, "CustomerID", "FullName")
+                    .Prepend(new SelectListItem { Value = "", Text = "Select a Customer", Selected = true }))" 
                     class="form-control"></select>
             <span asp-validation-for="CustomerID" class="text-danger"></span>
 
@@ -48,9 +52,9 @@
 
         <div class="form-group">
             <label asp-for="ProductID">Product</label>
-            <select asp-for="ProductID"
-                    asp-items="@(new SelectList(ViewBag.Products, "ProductID", "Name"))"
-                    class="form-control"></select>
+            <select asp-for="ProductID" asp-items="@(new SelectList(ViewBag.Products, "ProductID", "Name")
+                .Prepend(new SelectListItem { Value = "", Text = "Select a Product", Selected = true }))" 
+                class="form-control"></select>
             <span asp-validation-for="ProductID" class="text-danger"></span>
         </div>
 
@@ -81,9 +85,9 @@
 
         <div class="form-group">
             <label asp-for="TechnicianID">Technician</label>
-            <select asp-for="TechnicianID"
-                    asp-items="@(new SelectList(ViewBag.Technicians, "TechnicianID", "Name"))"
-                    class="form-control"></select>
+            <select asp-for="TechnicianID" asp-items="@(new SelectList(ViewBag.Technicians, "TechnicianID", "Name")
+                .Prepend(new SelectListItem { Value = "", Text = "Select a Technician", Selected = true }))" 
+                class="form-control"></select>
             <span asp-validation-for="TechnicianID" class="text-danger"></span>
         </div>
 

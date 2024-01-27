@@ -28,17 +28,22 @@ namespace SportsPro.Models
         public DateTime? DateClosed { get; set; } = null;
 
         [Required(ErrorMessage = "Please select a Customer.")]
-        public int CustomerID { get; set; }                   // foreign key property
-        public Customer Customer { get; set; } = null!;       // navigation property
+        public int CustomerID { get; set; }            // foreign key property
+        //public Customer Customer { get; set; } = null!;       // navigation property
+
+        public Customer? Customer { get; set; }
 
         [Required(ErrorMessage = "Please select a Product.")]
         public int ProductID { get; set; }                    // foreign key property
-        public Product Product { get; set; } = null!;         // navigation property
+        //public Product Product { get; set; } = null!;         // navigation property
+
+        public Product? Product { get; set; }
 
         [Required(ErrorMessage = "Please select a Technician.")]
         public int TechnicianID { get; set; }                 // foreign key property 
-		public Technician Technician { get; set; } = null!;   // navigation property
+		//public Technician Technician { get; set; } = null!;   // navigation property
 
-		
-	}
+        public Technician? Technician { get; set; }
+
+    }
 }
