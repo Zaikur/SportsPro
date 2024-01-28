@@ -39,8 +39,6 @@ namespace SportsPro.Controllers
         {
             Customer customer = new Customer();
 
-            customer.CountryID = "US";
-
             ViewBag.Action = "Add";
             ViewBag.Countries = countries;
 
@@ -87,7 +85,7 @@ namespace SportsPro.Controllers
         [HttpGet]
         public IActionResult Delete(int id)
         {
-            Customer customer = context.Customers.Find(id);
+            Customer? customer = context.Customers.Find(id);
             return View(customer);
         }
 

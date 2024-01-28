@@ -53,7 +53,8 @@
     <div class="form-group">
         <label asp-for="CountryID">Country</label>
         <select asp-for="CountryID"
-                asp-items="@(new SelectList(ViewBag.Countries, "CountryID", "Name"))"
+                asp-items="@(new SelectList(ViewBag.Countries, "CountryID", "Name")
+                .Prepend(new SelectListItem { Value="" , Text="Select a Country" , Selected=true }))"
                 class="form-control"></select>
         <span asp-validation-for="CountryID" class="text-danger"></span>
     </div>
