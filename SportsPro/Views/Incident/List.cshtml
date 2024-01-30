@@ -27,15 +27,7 @@
         {
             <tr>
                 <td>@incident.Title</td>
-                @*<td>@incident.Customer</td>
-                    To get the name, specify the property of the Customer object - Quinton
-                *@
                 <td>@incident.Customer.FullName</td>
-
-                @*<td>@incident.Product</td>
-                    Same as above
-                *@
-
                 <td>@incident.Product.Name</td>
                 <td>@incident.DateOpened.ToString("d")</td>
                 <td>
