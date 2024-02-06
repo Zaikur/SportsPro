@@ -23,6 +23,7 @@ namespace SportsPro.Controllers
             return RedirectToAction("List");
         }
 
+        [Route("Technicians")]
         public IActionResult List()
         {
             var technicians = context.Technicians
