@@ -40,7 +40,7 @@
                         <a class="nav-item nav-link @(c == "Registration" && a == "Index" ? "active" : "")" asp-controller="Registration" asp-action="Index">Registrations</a>
                     </div>
                     <div class="navbar-nav ms-auto">
-                        <a class="nav-item nav-link active" asp-controller="Home" asp-action="About">About</a>
+                        <a class="nav-item nav-link @(c == "Home" && a == "About" ? "active" : "")" asp-controller="Home" asp-action="About">About</a>
                     </div>
                 </nav>
             </div>
