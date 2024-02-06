@@ -2,6 +2,11 @@
  * Jason Nelson
  * 01/19/2024
  * Controller for the product portion of the SportsPro application
+ * 
+ * Jason Nelson
+ * 02/06/2024
+ * Used ViewResult and RedirectToActionResult, also added TempData message for when a product
+ * has been added, edited, or deleted.
  */
 
 
@@ -22,8 +27,7 @@ namespace SportsPro.Controllers
         }
 
         [Route("products")]
-        public IActionResult List()
->>>>>>> 33c2f7259e836a6238828589863c929fc03ecefa
+        public ViewResult List()
         {
             var products = context.Products.OrderBy(p => p.ReleaseDate).ToList();
             return View(products);
