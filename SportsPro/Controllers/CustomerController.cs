@@ -27,6 +27,7 @@ namespace SportsPro.Controllers
             return RedirectToAction("List");
         }
 
+        [Route("customers")]
         public IActionResult List()
         {
             var customers = context.Customers

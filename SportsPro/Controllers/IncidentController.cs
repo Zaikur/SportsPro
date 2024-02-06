@@ -38,7 +38,7 @@ namespace SportsPro.Controllers
             return RedirectToAction("List");
         }
 
-
+        [Route("Incidents")]
         public IActionResult List()
         {
             var incidents = context.Incidents

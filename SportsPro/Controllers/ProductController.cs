@@ -21,6 +21,7 @@ namespace SportsPro.Controllers
             return RedirectToAction("List");
         }
 
+        [Route("products")]
         public IActionResult List()
         {
             var products = context.Products.OrderBy(p => p.ReleaseDate).ToList();
