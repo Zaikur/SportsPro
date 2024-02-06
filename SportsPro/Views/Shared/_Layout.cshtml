@@ -50,9 +50,7 @@
     <div class="container">
         @if (TempData["UserMessage"] != null)
         {
-            <div class="alert alert-success" role="alert">
-                @TempData["UserMessage"]
-            </div>
+            <h2 class="bg-info text-white text-center p-2 mt-2 rounded">@TempData["UserMessage"]</h2>
         }
         <main role="main" class="pb-3">
             @RenderBody()
