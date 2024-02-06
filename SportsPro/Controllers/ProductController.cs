@@ -16,26 +16,26 @@ namespace SportsPro.Controllers
 
         public ProductController(SportsProContext ctx) => context = ctx;
 
-        public IActionResult Index()
+        public RedirectToActionResult Index()
         {
             return RedirectToAction("List");
         }
 
-        public IActionResult List()
+        public ViewResult List()
         {
             var products = context.Products.OrderBy(p => p.ReleaseDate).ToList();
             return View(products);
         }
 
         [HttpGet]
-        public IActionResult Add()
+        public ViewResult Add()
         {
             ViewBag.Action = "Add";
             return View("Edit", new Product());
         }
 
         [HttpGet]
-        public IActionResult Edit(int id)
+        public ViewResult Edit(int id)
         {
             ViewBag.Action = "Edit";
             var product = context.Products.Find(id);
@@ -51,12 +51,14 @@ namespace SportsPro.Controllers
                 {
                     context.Products.Add(product);
                     context.SaveChanges();
+                    TempData["UserMessage"] = product.Name + " added.";
                 }
                 else
                 {
                     context.Update(product);
                     context.SaveChanges();
-                }  
+                    TempData["UserMessage"] = product.Name + " edited.";
+                }
                 return RedirectToAction("List", "Product");
             }
             else
@@ -67,7 +69,7 @@ namespace SportsPro.Controllers
         }
 
         [HttpGet]
-        public IActionResult Delete(int id)
+        public ViewResult Delete(int id)
         {
             var product = context.Products.Find(id);
             return View(product);
@@ -78,6 +80,7 @@ namespace SportsPro.Controllers
         {
             context.Products.Remove(product);
             context.SaveChanges();
+            TempData["UserMessage"] = "Product deleted";
             return RedirectToAction("List", "Product");
         }
     }
