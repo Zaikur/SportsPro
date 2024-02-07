@@ -2,15 +2,17 @@
     Jason Nelson
     01/19/2024
     Page to delete a product from the database
+
+    02/06/2024
+    Modified the message to confirm you want to delete the product
 *@
 
 @model Product
 @{
     ViewData["Title"] = "Delete Product";
 }
-
-<h2>Confirm Deletion</h2>
-<h4>Are you sure you want to delete @Model.Name</h4>
+    <h2>Confirm Deletion</h2>
+    <h6>Are you sure you want to delete @Model.Name</h6>
 <form asp-action="Delete" method="post">
     <input type="hidden" asp-for="ProductID" />
     <button type="submit" class="btn btn-primary">Delete</button>
