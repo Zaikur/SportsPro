@@ -57,13 +57,13 @@ namespace SportsPro.Controllers
                 {
                     context.Products.Add(product);
                     context.SaveChanges();
-                    TempData["UserMessage"] = product.Name + " added.";
+                    TempData["UserMessage"] = product.Name + " was added.";
                 }
                 else
                 {
                     context.Update(product);
                     context.SaveChanges();
-                    TempData["UserMessage"] = product.Name + " edited.";
+                    TempData["UserMessage"] = product.Name + " was edited.";
                 }
                 return RedirectToAction("List", "Product");
             }
