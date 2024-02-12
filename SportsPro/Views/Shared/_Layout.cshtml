@@ -13,6 +13,9 @@
     <title>@ViewData["Title"] - SportsPro</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @RenderSection("scripts", false)
 </head>
 <body>
     @{
@@ -60,8 +63,5 @@
     <footer class="border-top footer text-muted mt-3 pb-3">
         <div class="container">&copy; @DateTime.Now.Year - SportsPro</div>
     </footer> 
-
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
