@@ -6,6 +6,12 @@
  * Quinton Nelson
  * 2/14/2024
  * Updated Add, Edit, and List methods to utilize View Models
+ * 
+ * Quinton Nelson
+ * 3/10/2024
+ * Add GetTechnician method to retrieve a list of technicians from the database
+ * Add ListByTechnician method to filter incidents by technician
+ * Modify Edit method to account for different operation types (From the technician view)
  */
 
 
@@ -91,6 +97,11 @@ namespace SportsPro.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
+            var technicianSignedIn = HttpContext.Session.GetString("TechnicianName");
+
+            //Check if the user is a technician
+            var level = technicianSignedIn == null ? "Admin" : "Technician";
+
             var incident = context.Incidents
                 .Include(c => c.Customer)
                 .Include(c => c.Technician)
@@ -101,6 +112,7 @@ namespace SportsPro.Controllers
             var viewModel = new IncidentAddEditViewModel
             {
                 OperationType = "Edit",
+                AccessLevel = level,
                 Customers = customers,
                 Technicians = technicians,
                 Products = products,
@@ -114,6 +126,21 @@ namespace SportsPro.Controllers
         [HttpPost]
         public IActionResult Edit(IncidentAddEditViewModel viewModel)
         {
+            // Get the selected technician from session state if there is one
+            var technicianSignedIn = HttpContext.Session.GetInt32("SelectedTechnicianId") ?? 0;
+
+            // If the user is a technician, update the incident and redirect to the ListByTechnician action
+            if (technicianSignedIn != 0)
+            {
+                var incident = context.Incidents.Find(viewModel.CurrentIncident.IncidentID);
+                incident.Description = viewModel.CurrentIncident.Description;
+                incident.DateClosed = viewModel.CurrentIncident.DateClosed;
+
+                context.SaveChanges();
+
+                return RedirectToAction("ListByTechnician");
+            }
+
             // Handle the form submission for adding/editing incidents
             if (ModelState.IsValid)
             {
@@ -128,6 +155,7 @@ namespace SportsPro.Controllers
                 }
 
                 context.SaveChanges();
+
                 return RedirectToAction("List");
             }
             else
@@ -158,6 +186,77 @@ namespace SportsPro.Controllers
             context.Incidents.Remove(incident);
             context.SaveChanges();
             return RedirectToAction("List", "Incident");
+        }
+
+        //Get a list of technicians from the database and return them to the view
+        [Route("TechIncident")]
+        [HttpGet]
+        public IActionResult GetTechnician()
+        {
+            var model = new TechnicianViewModel()
+            {
+                Technicians = context.Technicians.ToList()
+            };
+
+            return View(model);
+        }
+
+        //Get the selected technician from the view and redirect to the ListByTechnician action
+        [HttpPost]
+        [Route("TechIncident")]
+        public IActionResult GetTechnician(TechnicianViewModel model)
+        {
+            // Attempt to retrieve the technician from the database
+            var technician = context.Technicians.Find(model.SelectedTechnicianId);
+
+            // Save the technician in session state if it exists
+            if (technician != null)
+            {
+                HttpContext.Session.SetInt32("SelectedTechnicianId", model.SelectedTechnicianId);
+                HttpContext.Session.SetString("TechnicianName", context.Technicians.Find(model.SelectedTechnicianId).Name);
+            }
+
+
+            // Redirect to the ListByTechnician action, passing the selected technician ID.
+            return RedirectToAction("ListByTechnician", new { id = model.SelectedTechnicianId });
+        }
+
+        // Filter incidents by technician
+        [Route("techincident/list/{id?}")]
+        [HttpGet]
+        public IActionResult ListByTechnician(int? id)
+        {
+            // Get the selected technician from session state
+            id = HttpContext.Session.GetInt32("SelectedTechnicianId") ?? 0;
+
+            // If no technician is selected, redirect to the GetTechnician action
+            if (id == 0)
+            {
+                return RedirectToAction("GetTechnician");
+            }
+            ViewBag.TechnicianName = HttpContext.Session.GetString("TechnicianName");
+
+            // Fetch the incidents from the database that are still open
+            var incidents = context.Incidents
+                .Include(i => i.Customer)
+                .Include(i => i.Product)
+                .Include(i => i.Technician)
+                .Where(i => i.Technician.TechnicianID == id && i.DateClosed == null)
+                .OrderBy(i => i.IncidentID)
+                .ToList();
+
+            // Create an instance of the ViewModel
+            var viewModel = new IncidentListViewModel
+            {
+                Incidents = incidents,
+                IncidentFilter = "Technician",
+                Customers = context.Customers.ToList(),
+                Products = context.Products.ToList(),
+                Technicians = context.Technicians.ToList()
+            };
+
+            // Pass the ViewModel to the view
+            return View(viewModel);
         }
     }
 }

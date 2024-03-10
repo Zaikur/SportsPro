@@ -10,6 +10,14 @@ builder.Services.AddRouting(options => {
     options.AppendTrailingSlash = true;
 });
 
+// Add session state to the app
+builder.Services.AddMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.Cookie.Name = ".SportsPro.Session";
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+});
+
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<SportsProContext>(options =>
@@ -29,6 +37,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseSession();
 
 app.UseAuthorization();
 

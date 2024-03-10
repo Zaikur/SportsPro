@@ -1,0 +1,31 @@
+﻿@*
+    Quinton Nelson
+    3/10/2024
+    This page is used to get (login) the technician
+    After selection the next page will be an incident list assigned to the technician
+*@
+
+@model TechnicianViewModel
+@{
+    ViewData["Title"] = "Get Technician";
+}
+
+<h1>Technician</h1>
+<form asp-action="GetTechnician" method="post">
+    <div class="form-group">
+        <label asp-for="SelectedTechnicianId">Technician</label>
+        <select asp-for="SelectedTechnicianId" asp-items="@(new SelectList(Model.Technicians, "TechnicianID", "Name"))"
+                class="form-control"></select>
+        <span asp-validation-for="SelectedTechnicianId" class="text-danger"></span>
+    </div>
+    <br />
+    <div class="form-group">
+        <input type="submit" value="Select" class="btn btn-primary" />
+    </div>
+</form>
+
+
+@section scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}

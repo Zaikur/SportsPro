@@ -1,0 +1,54 @@
+﻿@*
+    Quinton Nelson
+    3/10/2024
+    This page is used to display a list of incidents assigned to a specific technician
+*@
+
+@model IncidentListViewModel
+@{
+    ViewData["Title"] = "List incidents for Technician";
+    var technicianName = ViewBag.TechnicianName as string;
+}
+
+<h1>Technician: @technicianName</h1>
+<h2>Assigned/Open Incidents</h2>
+
+@if (Model.Incidents.Count() == 0)
+{
+    <hr />
+    <h3>No open incidents for @technicianName</h3>
+    <br />
+}
+else
+{
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Customer</th>
+                <th>Product</th>
+                <th>Date Opened</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var incident in Model.Incidents)
+            {
+                <tr>
+                    <td>@incident.Title</td>
+                    <td>@incident.Customer?.FullName</td>
+                    <td>@incident.Product?.Name</td>
+                    <td>@incident.DateOpened.ToString("d")</td>
+                    <td>
+                        <a asp-controller="Incident" asp-action="Edit" class="btn btn-primary"
+                           asp-route-id="@incident.IncidentID">Edit</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<div class="mt-2">
+    <a asp-controller="Incident" asp-action="GetTechnician" class="btn btn-primary">Switch Technician</a>
+</div>
