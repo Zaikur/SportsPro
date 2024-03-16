@@ -12,10 +12,6 @@
  * Add GetTechnician method to retrieve a list of technicians from the database
  * Add ListByTechnician method to filter incidents by technician
  * Modify Edit method to account for different operation types (From the technician view)
- * 
- * Jason Nelson
- * 03/15/2024
- * Added methods to filter incidents based on if they are unassigned or open
  */
 
 
@@ -79,62 +75,6 @@ namespace SportsPro.Controllers
 
             // Pass the ViewModel to the view
             return View(viewModel);
-        }
-
-        [HttpGet("Incidents/Unassigned")]
-        public IActionResult ListUnassigned()
-        {
-            var incidents = context.Incidents
-                .Include(i => i.Customer)
-                .Include(i => i.Product)
-                .Include(i => i.Technician)
-                .Where(i => i.TechnicianID == -1)
-                .OrderBy(i => i.IncidentID)
-                .ToList();
-
-            // Prepare the ViewModel for the view
-            var viewModel = new IncidentListViewModel
-            {
-                Incidents = incidents,
-
-                //Set up filtering structure for later use
-                IncidentFilter = "Unassigned",
-
-                // Populated lists for use in filtering
-                Customers = context.Customers.ToList(),
-                Products = context.Products.ToList(),
-                Technicians = context.Technicians.ToList()
-            };
-
-            return View("List", viewModel); // Reuse the List view with the filtered incidents
-        }
-
-        [HttpGet("Incidents/Open")]
-        public IActionResult ListOpenIncidents()
-        {
-            var incidents = context.Incidents
-                .Include(i => i.Customer)
-                .Include(i => i.Product)
-                .Include(i => i.Technician)
-                .Where(i => i.DateClosed == null)
-                .OrderBy(i => i.IncidentID)
-                .ToList();
-
-            // Prepare the ViewModel for the view
-            var viewModel = new IncidentListViewModel
-            {
-                Incidents = incidents,
-
-                //Set up filtering structure for later use
-                IncidentFilter = "Open",
-
-                // Populated lists for use in filtering
-                Customers = context.Customers.ToList(),
-                Products = context.Products.ToList(),
-                Technicians = context.Technicians.ToList()
-            };
-
-            return View("List", viewModel); // Reuse the List view with the filtered incidents
         }
 
         [HttpGet]

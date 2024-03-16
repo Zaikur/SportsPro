@@ -6,10 +6,6 @@
    Quinton Nelson
     2/14/2024
     Update razor view to use data from the ViewModel for the title and all fields.
-
-    Jason Nelson
-    03/15/2024
-    Updated list view to include bootstrap pills for filtering.
 *@
 
 @model IncidentListViewModel
@@ -18,18 +14,6 @@
 }
 
 <h1>Incident Manager</h1>
-
-<ul class="nav nav-pills mb-3">
-    <li class="nav-item">
-        <a class="nav-link @(@Model.IncidentFilter == "All" ? "active" : "")" href="@Url.Action("List", "Incident")">All Incidents</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link @(@Model.IncidentFilter == "Unassigned" ? "active" : "")" href="@Url.Action("ListUnassigned", "Incident")">Unassigned Incidents</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link @(@Model.IncidentFilter == "Open" ? "active" : "")" href="@Url.Action("ListOpenIncidents", "Incident")">Open Incidents</a>
-    </li>
-</ul>
 
 <table class="table table-bordered table-striped">
     <thead>
