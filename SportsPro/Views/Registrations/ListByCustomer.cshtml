@@ -36,12 +36,14 @@
                     <td>@registration.Product.Name</td>
                     <td>
                         <form asp-action="DeleteRegistration" method="post">
-                            <input type="hidden" name="registrationId" value="@registration.RegistrationId" />
+                            <input type="hidden" name="productId" value="@registration.ProductID" />
+                            <input type="hidden" name="customerId" value="@Model.SelectedCustomerId" />
                             <button type="submit" class="btn btn-primary">Delete</button>
                         </form>
                     </td>
                 </tr>
             }
+
         </tbody>
     </table>
 }

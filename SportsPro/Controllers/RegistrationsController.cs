@@ -142,9 +142,10 @@ namespace SportsPro.Controllers
 
         // Delete a product registration for the selected customer
         [HttpPost]
-        public IActionResult DeleteRegistration(int registrationId)
+        public IActionResult DeleteRegistration(int productId, int customerId)
         {
-            var registration = context.Registrations.FirstOrDefault(r => r.RegistrationId == registrationId);
+            var registration = context.Registrations
+                .FirstOrDefault(r => r.CustomerID == customerId && r.ProductID == productId);
 
             if (registration == null)
             {
@@ -157,8 +158,9 @@ namespace SportsPro.Controllers
                 TempData["Message"] = "Product registration deleted successfully.";
             }
 
-            return RedirectToAction("ListByCustomer");
+            return RedirectToAction("ListByCustomer", new { id = customerId });
         }
+
 
     }
 }

@@ -10,9 +10,6 @@ namespace SportsPro.Models
 {
     public class Registration
     {
-        [Key]
-        public int RegistrationId { get; set; }
-
         public int CustomerID { get; set; }
         public Customer Customer { get; set; }
 
