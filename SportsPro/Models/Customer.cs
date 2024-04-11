@@ -1,4 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿/* 
+ * Jason Nelson
+ * 04/11/2024
+ * Added an ICollection for Registration
+ */
+
+using System.ComponentModel.DataAnnotations;
 
 namespace SportsPro.Models
 {
@@ -43,5 +49,8 @@ namespace SportsPro.Models
         public Country? Country { get; set; }          // navigation property
 
         public string FullName => FirstName + " " + LastName;   // read-only property
-	}
+
+        //Gets or sets the collection of registrations associated with the customer.
+        public ICollection<Registration> Registrations { get; set; }
+    }
 }

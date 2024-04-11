@@ -3,6 +3,10 @@
     02/06/2024
     Got the navigation links to work correctly, displaying active only if the respective controller is active
     Display a TempData message when a product has been added, edited, or deleted.
+
+    Jason Nelson
+    04/11/2024
+    Modified the asp-action of the Registration to take the user to the GetCustomer page
 *@
 
 <!DOCTYPE html>
@@ -42,7 +46,7 @@
                         <a class="nav-item nav-link @(c == "Technician" && a == "List" ? "active" : "")" asp-controller="Technician" asp-action="List">Technicians</a>
                         <a class="nav-item nav-link @(c == "Customer" && a == "List" ? "active" : "")" asp-controller="Customer" asp-action="List">Customers</a>
                         <a class="nav-item nav-link @(c == "Incident" && a == "List" ? "active" : "")" asp-controller="Incident" asp-action="List">Incidents</a>
-                        <a class="nav-item nav-link @(c == "Registration" && a == "Index" ? "active" : "")" asp-controller="Registration" asp-action="Index">Registrations</a>
+                        <a class="nav-item nav-link @(c == "Registration" && a == "GetCustomer" ? "active" : "")" asp-controller="Registration" asp-action="GetCustomer">Registrations</a>
                     </div>
                     <div class="navbar-nav ms-auto">
                         <a class="nav-item nav-link @(c == "Home" && a == "About" ? "active" : "")" asp-controller="Home" asp-action="About">About</a>

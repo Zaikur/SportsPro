@@ -2,8 +2,13 @@
  * Jason Nelson
  * 01/19/2024
  * Product model to validate data
+ * 
+ * Jason Nelson
+ * 04/11/2024
+ * Added an ICollection for Registration
  */
 
+using SportsPro.Migrations;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -27,5 +32,8 @@ namespace SportsPro.Models
 
         [Required(ErrorMessage = "Please enter a date.")]
         public DateTime ReleaseDate { get; set; } = DateTime.Now;
+
+       //Gets or sets the collection of registrations associated with the product.
+        public ICollection<Registration> Registrations { get; set; }
     }
 }

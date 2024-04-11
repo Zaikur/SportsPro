@@ -1,0 +1,71 @@
+﻿@*
+    Jason Nelson
+    04/11/2024
+    Product registration page for selected customer
+*@
+
+@model CustomerViewModel
+@{
+    ViewData["Title"] = "Registrations";
+    var customerName = ViewBag.CustomerName as string;
+}
+
+<h1>Customer: @customerName</h1>
+<h2>Registrations</h2>
+
+@if (!string.IsNullOrEmpty(TempData["Message"] as string))
+{
+    <div class="alert alert-info" role="alert">
+        @TempData["Message"]
+    </div>
+}
+
+@if (Model.Registrations.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var registration in Model.Registrations)
+            {
+                <tr>
+                    <td>@registration.Product.Name</td>
+                    <td>
+                        <form asp-action="DeleteRegistration" method="post">
+                            <input type="hidden" name="registrationId" value="@registration.RegistrationId" />
+                            <button type="submit" class="btn btn-primary">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No registrations found for this customer.</p>
+}
+
+@if (Model.Products.Any())
+{
+    <form asp-action="RegisterProduct" method="post">
+        <div class="form-group">
+            <label for="productId">Select Product:</label>
+            <select class="form-control" id="productId" name="productId">
+                @foreach (var product in Model.Products)
+                {
+                    <option value="@product.ProductID">@product.Name</option>
+                }
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Register</button>
+    </form>
+}
+else
+{
+    <p>No products available for registration.</p>
+}
