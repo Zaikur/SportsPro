@@ -33,7 +33,7 @@ namespace SportsPro.Models
         [Required(ErrorMessage = "Please enter a date.")]
         public DateTime ReleaseDate { get; set; } = DateTime.Now;
 
-       //Gets or sets the collection of registrations associated with the product.
-        public ICollection<Registration> Registrations { get; set; }
+        //Gets or sets the collection of registrations associated with the product.
+        public ICollection<Registration> Registrations { get; set; } = new List<Registration>();
     }
 }

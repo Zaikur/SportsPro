@@ -51,6 +51,6 @@ namespace SportsPro.Models
         public string FullName => FirstName + " " + LastName;   // read-only property
 
         //Gets or sets the collection of registrations associated with the customer.
-        public ICollection<Registration> Registrations { get; set; }
+        public ICollection<Registration> Registrations { get; set; } = new List<Registration>();
     }
 }
