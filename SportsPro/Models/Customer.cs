@@ -5,6 +5,7 @@
  */
 
 using System.ComponentModel.DataAnnotations;
+using SportsPro.Models.Attributes;
 
 namespace SportsPro.Models
 {
@@ -13,34 +14,35 @@ namespace SportsPro.Models
         public int CustomerID { get; set; }
 
         [Required(ErrorMessage = "First name is required.")]
-        [StringLength(50)]
+        [StringLength(51, MinimumLength = 1)]
         public string FirstName { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Last name is required.")]
-        [StringLength(50)]
+        [StringLength(51, MinimumLength = 1)]
         public string LastName { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Address is required.")]
-        [StringLength(100)]
+        [StringLength(51, MinimumLength = 1)]
         public string Address { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "City is required.")]
-        [StringLength(100)]
+        [StringLength(51, MinimumLength = 1)]
         public string City { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "State is required.")]
-        [StringLength(2)]
+        [StringLength(51, MinimumLength = 1)]
         public string State { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Postal code is required.")]
-        [StringLength(10, ErrorMessage = "Postal code must be between 5 and 10 characters.", MinimumLength = 5)]
-        [RegularExpression(@"^\d{5}(-\d{4})?$", ErrorMessage = "Invalid ZIP code format.")]
+        [StringLength(21, MinimumLength = 1)]
         public string PostalCode { get; set; } = string.Empty;
 
         [Phone(ErrorMessage = "Invalid phone format.")]
+        [RegularExpression(@"^\d{3}-\d{3}-\d{4}$", ErrorMessage = "Invalid phone format. Use ###-###-####.")]
         public string? Phone { get; set; }
 
         [EmailAddress(ErrorMessage = "Invalid email address.")]
+        [EmailDuplicate]
         public string? Email { get; set; }
 
         [Required(ErrorMessage = "Please select a country.")]
