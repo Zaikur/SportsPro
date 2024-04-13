@@ -11,6 +11,7 @@
  */
 
 using System.ComponentModel.DataAnnotations;
+using SportsPro.Models.Attributes;
 
 namespace SportsPro.Models
 {
@@ -48,6 +49,7 @@ namespace SportsPro.Models
         public string? Phone { get; set; }
 
         [EmailAddress(ErrorMessage = "Please enter a valid email address.")]
+        [EmailDuplicate]
         [DataType(DataType.EmailAddress, ErrorMessage = "Please enter a valid email address.")]
         [StringLength(50, ErrorMessage = "Email must be between 1 and 50 characters.", MinimumLength = 1)]
 
