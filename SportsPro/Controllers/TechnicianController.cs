@@ -5,7 +5,6 @@
  */
 
 using Microsoft.AspNetCore.Mvc;
-using NuGet.Protocol.Core.Types;
 using SportsPro.Data.DataLayer;
 using SportsPro.Data.DataLayer.Repositories;
 using SportsPro.Models;
