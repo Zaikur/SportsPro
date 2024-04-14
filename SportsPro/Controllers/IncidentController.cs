@@ -16,6 +16,10 @@
  * Jason Nelson
  * 03/15/2024
  * Added methods to filter incidents based on if they are unassigned or open
+ * 
+ * Quinton Nelson
+ * 04/14/2024
+ * Modified the Incident Controller to use the SportsProUnitOfWork class to access the database
  */
 
 

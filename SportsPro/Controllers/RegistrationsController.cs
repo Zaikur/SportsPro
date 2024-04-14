@@ -2,6 +2,10 @@
  * Jason Nelson
  * 04/11/2024
  * Registration controller to handle product registrations/deletions
+ * 
+ * Quinton Nelson
+ * 4/14/2024
+ * Modified Registration controller to use the SportsProUnitOfWork class
  */
 
 using Microsoft.AspNetCore.Mvc;

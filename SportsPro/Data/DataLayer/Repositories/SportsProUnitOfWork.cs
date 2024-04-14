@@ -1,4 +1,10 @@
-﻿using SportsPro.Models;
+﻿/*
+ *Quinton Nelson
+ * 04 / 14 / 2024
+ * This class is the unit of work class that will be used to access the repositories for the database.
+ */
+
+using SportsPro.Models;
 
 
 namespace SportsPro.Data.DataLayer.Repositories

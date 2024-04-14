@@ -1,4 +1,9 @@
-﻿using NuGet.Packaging.Core;
+﻿/*
+ *Quinton Nelson
+ * 04 / 14 / 2024
+ * This class is the interface for the SportsProUnitOfWork class. It contains read-only properties for each repository.
+ */
+
 using SportsPro.Models;
 
 namespace SportsPro.Data.DataLayer.Repositories

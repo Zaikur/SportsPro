@@ -1,4 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿/*
+ * Quinton Nelson
+ * 04 / 14 / 2024
+ * This class is the context class for the SportsPro database. It contains the DbSets for the database tables and the OnModelCreating method to configure the database.
+ */
+
+
+using Microsoft.EntityFrameworkCore;
 using SportsPro.Models;
 using SportsPro.Data.Configuration;
 

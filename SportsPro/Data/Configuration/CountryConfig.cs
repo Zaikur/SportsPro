@@ -1,4 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿/*
+ * Quinton Nelson
+ * 04 / 14 / 2024
+ * This class is used to seed the database with the countries that are available for selection in the customer form.
+ */
+
+
+
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SportsPro.Models;
 

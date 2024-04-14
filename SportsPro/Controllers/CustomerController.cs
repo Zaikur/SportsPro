@@ -2,6 +2,10 @@
  * Quinton Nelson 
  * 1/21/2023
  * Controller for the customer portion of the application
+ * 
+ * Quinton Nelson
+ * 04/14/2024
+ * Modified the Customer Controller to use the SportsProUnitOfWork class to access the database
  */
 
 using Microsoft.AspNetCore.Mvc;
