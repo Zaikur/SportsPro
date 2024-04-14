@@ -6,6 +6,8 @@
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SportsPro.Data.DataLayer;
+using SportsPro.Data.DataLayer.Repositories;
 using SportsPro.Models;
 using SportsPro.ViewModels;
 
@@ -13,55 +15,40 @@ namespace SportsPro.Controllers
 {
     public class RegistrationsController : Controller
     {
-        private SportsProContext context { get; set; }
-
-        private List<Product> products;
-        private List<Customer> customers;
+        private readonly SportsProUnitOfWork _unitOfWork;
 
         public RegistrationsController(SportsProContext ctx)
         {
-            context = ctx;
-
-            products = context.Products.ToList();
-            customers = context.Customers.ToList();
+            _unitOfWork = new SportsProUnitOfWork(ctx);
         }
 
-        // Redirect to the GetCustomer action when accessing the Index page
-        public RedirectToActionResult Index()
-        {
-            return RedirectToAction("GetCustomer");
-        }
-
-        // Display the GetCustomer page to select a customer for product registration
         [Route("registration/getcustomer")]
         [HttpGet]
         public IActionResult GetCustomer()
         {
-            var model = new CustomerViewModel()
+            var model = new CustomerViewModel
             {
-                Customers = context.Customers.ToList()
+                Customers = _unitOfWork.Customers.List(new QueryOptions<Customer>()).ToList()
             };
 
             return View(model);
         }
 
-        // Process the selected customer and redirect to the ListByCustomer action
         [HttpPost]
         [Route("registration/getcustomer")]
         public IActionResult GetCustomer(CustomerViewModel model)
         {
-            var customer = context.Customers.Find(model.SelectedCustomerId);
+            var customer = _unitOfWork.Customers.Get(model.SelectedCustomerId);
 
             if (customer != null)
             {
                 HttpContext.Session.SetInt32("SelectedCustomerId", model.SelectedCustomerId);
-                HttpContext.Session.SetString("CustomerName", context.Customers.Find(model.SelectedCustomerId).FullName);
+                HttpContext.Session.SetString("CustomerName", customer.FullName);
             }
 
             return RedirectToAction("ListByCustomer", new { id = model.SelectedCustomerId });
         }
 
-        // Display a list of registrations for the selected customer
         [Route("registrations/{id?}")]
         [HttpGet]
         public IActionResult ListByCustomer(int? id)
@@ -73,9 +60,7 @@ namespace SportsPro.Controllers
                 return RedirectToAction("GetCustomer");
             }
 
-            var customer = context.Customers
-                                    .Include(c => c.Registrations)
-                                    .FirstOrDefault(c => c.CustomerID == id);
+            var customer = _unitOfWork.Customers.Get(id.Value);
 
             if (customer == null)
             {
@@ -84,25 +69,17 @@ namespace SportsPro.Controllers
 
             ViewBag.CustomerName = customer.FullName;
 
-            var registrations = customer.Registrations.ToList();
-
-            var registeredProductIds = registrations.Select(r => r.ProductID).ToList();
-            var products = context.Products
-                                    .Where(p => !registeredProductIds.Contains(p.ProductID))
-                                    .ToList();
-
             var viewModel = new CustomerViewModel
             {
                 SelectedCustomerId = customer.CustomerID,
                 SelectedCustomerName = customer.FullName,
-                Registrations = registrations,
-                Products = products
+                Registrations = customer.Registrations.ToList(),
+                Products = _unitOfWork.Products.List(new QueryOptions<Product>()).ToList()
             };
 
             return View(viewModel);
         }
 
-        // Register a product for the selected customer
         [HttpPost]
         public IActionResult RegisterProduct(int productId)
         {
@@ -113,14 +90,7 @@ namespace SportsPro.Controllers
                 return RedirectToAction("GetCustomer");
             }
 
-            var customer = context.Customers
-                            .Include(c => c.Registrations)
-                            .FirstOrDefault(c => c.CustomerID == customerId);
-
-            if (customer == null)
-            {
-                return RedirectToAction("GetCustomer");
-            }
+            var customer = _unitOfWork.Customers.Get(customerId.Value);
 
             if (customer.Registrations.Any(r => r.ProductID == productId))
             {
@@ -134,33 +104,34 @@ namespace SportsPro.Controllers
                 ProductID = productId
             };
 
-            context.Registrations.Add(registration);
-            context.SaveChanges();
+            _unitOfWork.Registrations.Insert(registration);
+            _unitOfWork.Save();
 
             return RedirectToAction("ListByCustomer", new { id = customerId });
         }
 
-        // Delete a product registration for the selected customer
         [HttpPost]
         public IActionResult DeleteRegistration(int productId, int customerId)
         {
-            var registration = context.Registrations
-                .FirstOrDefault(r => r.CustomerID == customerId && r.ProductID == productId);
-
-            if (registration == null)
+            var options = new QueryOptions<Registration>
             {
-                TempData["Message"] = "Registration not found.";
+                Where = r => r.CustomerID == customerId && r.ProductID == productId
+            };
+
+            var registration = _unitOfWork.Registrations.List(options).FirstOrDefault();
+
+            if (registration != null)
+            {
+                _unitOfWork.Registrations.Delete(registration);
+                _unitOfWork.Save();
+                TempData["Message"] = "Product registration deleted successfully.";
             }
             else
             {
-                context.Registrations.Remove(registration);
-                context.SaveChanges();
-                TempData["Message"] = "Product registration deleted successfully.";
+                TempData["Message"] = "Registration not found.";
             }
 
             return RedirectToAction("ListByCustomer", new { id = customerId });
         }
-
-
     }
 }
