@@ -2,6 +2,10 @@
  * Quinton Nelson
  * 4/13/2024
  * This attribute class is used to validate that the email address entered by the user is not already in use by another customer.
+ * 
+ * Quinton Nelson
+ * 4/14/2024
+ * Modified this attribute to use the IRepository<Customer> service to access the database.
  */
 
 using SportsPro.Data.DataLayer;
