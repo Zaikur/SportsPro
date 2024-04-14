@@ -1,6 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.FileSystemGlobbing.Internal.Patterns;
-using SportsPro.Models;
 using SportsPro.Data.DataLayer;
 using SportsPro.Data.DataLayer.Repositories;
 
