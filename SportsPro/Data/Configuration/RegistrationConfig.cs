@@ -1,4 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿/*
+ * Jason Nelson
+ * 04/14/2024
+ * Removed data from db context and put it here in its own class
+ */
+
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using SportsPro.Models;
 

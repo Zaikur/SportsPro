@@ -1,4 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿/*
+ * Jason Nelson
+ * 04/14/2024
+ * Removed seed data from db context class and put them in here.
+ */
+
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using NuGet.DependencyResolver;
 using SportsPro.Models;
