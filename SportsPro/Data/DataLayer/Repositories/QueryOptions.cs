@@ -6,45 +6,27 @@ namespace SportsPro.Data.DataLayer
     public class QueryOptions<T>
     {
         // public properties for sorting, filtering, and paging
-        public Expression<Func<T, Object>> OrderBy { get; set; }
+        public Expression<Func<T, Object>> OrderBy { get; set; } = null!;
+        public Expression<Func<T, bool>> Where { get; set; } = null!;
         public string OrderByDirection { get; set; } = "asc";  // default
-        public int PageNumber { get; set; }
-        public int PageSize { get; set; }
 
-        // filter by more than one where clause. User can set value for Where property 
-        // repeatedly, or can instantiate a new WhereClauses property, whose type
-        // is a class that inherits a list of where expressions (see below)
-        public WhereClauses<T> WhereClauses { get; set; }
-        public Expression<Func<T, bool>> Where
-        {
-            set
-            {
-                if (WhereClauses == null)
-                {
-                    WhereClauses = new WhereClauses<T>();
-                }
-                WhereClauses.Add(value);
-            }
-        }
+        /* Code for working with Include strings */
+        private string[] includes = Array.Empty<string>();
 
-        // private backing field for property and method that work with Include strings
-        private string[] includes;
-
-        // public write-only property for Include strings – converts comma-separated string to array 
-        // and stores in private backing field
+        // public write-only property for Include strings – accepts a string, converts it to
+        // a string array, and stores in private string array field
         public string Includes
         {
             set => includes = value.Replace(" ", "").Split(',');
         }
 
-        // public get method for Include strings - returns private backing field or empty string array 
-        // if private backing field is null
-        public string[] GetIncludes() => includes ?? new string[0];
+        // public get method for Include strings - returns private string array, or
+        // empty string array if private backing field is null
+        public string[] GetIncludes() => includes;
 
         // read-only properties 
-        public bool HasWhere => WhereClauses != null;
+        public bool HasWhere => Where != null;
         public bool HasOrderBy => OrderBy != null;
-        public bool HasPaging => PageNumber > 0 && PageSize > 0;
     }
 
     // basically an alias for a list of where expressions - to make code clearer

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SportsPro.Models;
+using System.Linq.Expressions;
 
 namespace SportsPro.Data.DataLayer.Repositories
 {
@@ -46,10 +47,6 @@ namespace SportsPro.Data.DataLayer.Repositories
                     query = query.OrderBy(options.OrderBy);
                 else
                     query = query.OrderByDescending(options.OrderBy);
-            }
-            if (options.HasPaging)
-            {
-                query = query.PageBy(options.PageNumber, options.PageSize);
             }
 
             return query;
