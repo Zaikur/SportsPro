@@ -4,7 +4,7 @@ using SportsPro.Models;
 
 namespace SportsPro.Data.Configuration
 {
-    public class IncidentConfiguration : IEntityTypeConfiguration<Incident>
+    public class IncidentConfig : IEntityTypeConfiguration<Incident>
     {
         public void Configure(EntityTypeBuilder<Incident> builder)
         {
