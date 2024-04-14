@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileSystemGlobbing.Internal.Patterns;
 using SportsPro.Models;
 using SportsPro.Data.DataLayer;
+using SportsPro.Data.DataLayer.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,9 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<SportsProContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("SportsPro")));
+
+builder.Services.AddScoped<IRepository<Customer>, Repository<Customer>>();
+builder.Services.AddScoped<ISportsProUnitOfWork, SportsProUnitOfWork>();
 
 var app = builder.Build();
 

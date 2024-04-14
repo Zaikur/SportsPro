@@ -14,20 +14,20 @@ namespace SportsPro.Models.Attributes
     {
         protected override ValidationResult IsValid(object? value, ValidationContext validationContext)
         {
-            // Using a service locator pattern to resolve dependencies
-            var unitOfWork = validationContext.GetService<SportsProUnitOfWork>();
+            // Get the IRepository<Customer> using the service provider
+            var customerRepository = validationContext.GetService<IRepository<Customer>>();
 
-            if (unitOfWork == null)
+            if (customerRepository == null)
             {
-                return new ValidationResult("Database connection error.");
+                return new ValidationResult("Unable to access customer repository.");
             }
 
             bool exists = false;
 
             if (value != null && value is string email)
             {
-                // Use repository to check for existing email
-                exists = unitOfWork.Customers.List(new QueryOptions<Customer>
+                // Use the customer repository to check for existing email
+                exists = customerRepository.List(new QueryOptions<Customer>
                 {
                     Where = c => c.Email == email
                 }).Any();
