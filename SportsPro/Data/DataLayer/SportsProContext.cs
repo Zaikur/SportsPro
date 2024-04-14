@@ -22,6 +22,7 @@ namespace SportsPro.Data.DataLayer
             modelBuilder.ApplyConfiguration(new IncidentConfig());
             modelBuilder.ApplyConfiguration(new ProductConfig());
             modelBuilder.ApplyConfiguration(new TechnicianConfiguration());
+            modelBuilder.ApplyConfiguration(new RegistrationConfig());
         }
     }
 }
