@@ -43,7 +43,7 @@ namespace SportsPro.Controllers
             Customer customer = new Customer();
 
             ViewBag.Action = "Add";
-            ViewBag.Countries = data.Countries;
+            ViewBag.Countries = data.Countries.List(new QueryOptions<Country>());
 
             return View("AddEdit", customer);
         }
