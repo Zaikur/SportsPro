@@ -75,7 +75,7 @@ namespace SportsPro.Controllers
             {
                 Where = t => t.TechnicianID == id
             });
-            return View("AddEdit", technician);
+            return View("Delete", technician);
         }
 
         [HttpPost]
