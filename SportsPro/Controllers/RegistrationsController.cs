@@ -53,14 +53,22 @@ namespace SportsPro.Controllers
         [HttpGet]
         public IActionResult ListByCustomer(int? id)
         {
-            id ??= HttpContext.Session.GetInt32("SelectedCustomerId") ?? 0;
+            id ??= HttpContext.Session.GetInt32("SelectedCustomerId");
 
             if (id == 0)
             {
                 return RedirectToAction("GetCustomer");
             }
 
-            var customer = _unitOfWork.Customers.Get(id.Value);
+            // Prepare query options with includes
+            var options = new QueryOptions<Customer>
+            {
+                Where = c => c.CustomerID == id.Value,
+                Includes = "Registrations.Product" // Specify related data to include
+            };
+
+            // Retrieve the customer with included data
+            var customer = _unitOfWork.Customers.Get(options);
 
             if (customer == null)
             {
