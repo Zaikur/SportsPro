@@ -4,7 +4,7 @@ using SportsPro.Models;
 
 namespace SportsPro.Data.Configuration
 {
-    public class CountryConfiguration : IEntityTypeConfiguration<Country>
+    public class CountryConfig : IEntityTypeConfiguration<Country>
     {
         public void Configure(EntityTypeBuilder<Country> builder)
         {

@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using NuGet.DependencyResolver;
+using SportsPro.Models;
 
-namespace SportsPro.Models
+namespace SportsPro.Data.Configuration
 {
     internal class CustomerConfig : IEntityTypeConfiguration<Customer>
     {
