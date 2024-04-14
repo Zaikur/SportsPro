@@ -248,13 +248,12 @@ namespace SportsPro.Controllers
 
             var incident = data.Incidents.Get(options);
 
-            var viewModel = new IncidentAddEditViewModel
+            var viewModel = new IncidentListViewModel
             {
-                OperationType = "Edit",
                 Customers = data.Customers.List(new QueryOptions<Customer>()).ToList(),
                 Technicians = data.Technicians.List(new QueryOptions<Technician>()).ToList(),
                 Products = data.Products.List(new QueryOptions<Product>()).ToList(),
-                CurrentIncident = incident
+                Incidents = data.Incidents.List(options).ToList()
             };
 
             // Pass the ViewModel to the view
