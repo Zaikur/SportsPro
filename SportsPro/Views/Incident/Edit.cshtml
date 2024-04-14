@@ -109,7 +109,7 @@
     @if (Model.AccessLevel == "Admin")
     {
         <button type="submit" class="btn btn-primary">@Model.OperationType</button>
-        <a asp-action="ListByTechnician" class="btn btn-primary">Cancel</a>
+        <a asp-action="List" class="btn btn-primary">Cancel</a>
     }
     else if (Model.AccessLevel == "Technician")
     {
