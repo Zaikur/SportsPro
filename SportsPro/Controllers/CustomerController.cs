@@ -6,21 +6,19 @@
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SportsPro.Data.DataLayer.Repositories;
+using SportsPro.Data.DataLayer;
 using SportsPro.Models;
 
 namespace SportsPro.Controllers
 {
     public class CustomerController : Controller
     {
-        private SportsProContext context;
-        private List<Country> countries;
+        private SportsProUnitOfWork data { get; set; }
 
         public CustomerController(SportsProContext ctx)
         {
-            context = ctx;
-            countries = context.Countries
-                .OrderBy (country => country.Name)
-                .ToList();
+            data = new SportsProUnitOfWork(ctx);
         }
         public IActionResult Index()
         {
@@ -30,8 +28,12 @@ namespace SportsPro.Controllers
         [Route("customers")]
         public IActionResult List()
         {
-            var customers = context.Customers
-                .OrderBy(c => c.CustomerID).ToList();
+            var options = new QueryOptions<Customer>
+            {
+                OrderBy = c => c.CustomerID
+            };
+
+            var customers = data.Customers.List(options);
             return View(customers);
         }
 
@@ -41,7 +43,7 @@ namespace SportsPro.Controllers
             Customer customer = new Customer();
 
             ViewBag.Action = "Add";
-            ViewBag.Countries = countries;
+            ViewBag.Countries = data.Countries;
 
             return View("AddEdit", customer);
         }
@@ -49,13 +51,16 @@ namespace SportsPro.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            Customer? customer = context.Customers
-                .Include(c => c.Country)
-                .FirstOrDefault(c => c.CustomerID == id);
+            var options = new QueryOptions<Customer>
+            {
+                Includes = "Country", // Ensure this is the correct navigation property name
+                Where = c => c.CustomerID == id
+            };
+
+            Customer? customer = data.Customers.Get(options);
 
             ViewBag.Action = "Edit";
-            ViewBag.Countries = countries;
-
+            ViewBag.Countries = data.Countries.List(new QueryOptions<Country>());
             return View("AddEdit", customer);
         }
 
@@ -66,27 +71,27 @@ namespace SportsPro.Controllers
             {
                 if (customer.CustomerID == 0)
                 {
-                    context.Customers.Add(customer);
+                    data.Customers.Insert(customer);
                 }
                 else
                 {
-                    context.Customers.Update(customer);
+                    data.Customers.Update(customer);
                 }
-                context.SaveChanges();
+                data.Save();
                 return RedirectToAction("List");
             }
             else
             {
-                ViewBag.Action = "Save";
-                ViewBag.Countries = countries;
-                return View("AddEdit");
+                ViewBag.Action = customer.CustomerID == 0 ? "Add" : "Edit";
+                ViewBag.Countries = data.Countries.List(new QueryOptions<Country>());
+                return View("AddEdit", customer);
             }
         }
 
         [HttpGet]
         public IActionResult Delete(int id)
         {
-            Customer? customer = context.Customers.Find(id);
+            Customer? customer = data.Customers.Get(id);
             return View(customer);
         }
 
@@ -94,8 +99,8 @@ namespace SportsPro.Controllers
         [HttpPost]
         public IActionResult Delete(Customer customer)
         {
-            context.Customers.Remove(customer);
-            context.SaveChanges();
+            data.Customers.Delete(customer);
+            data.Save();
             return RedirectToAction("List");
         }
     }
