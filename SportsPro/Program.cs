@@ -25,7 +25,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<SportsProContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("SportsPro")));
 
-builder.Services.AddScoped<IRepository<Customer>, Repository<Customer>>();
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<ISportsProUnitOfWork, SportsProUnitOfWork>();
 
 var app = builder.Build();
