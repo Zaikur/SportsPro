@@ -5,13 +5,16 @@
 *@
 @model Technician
 @{
-    string title = ViewBag.Action + " " + "Technician";
+    // Determine if the action is Add or Edit based on whether the TechnicianID is set
+    var action = Model.TechnicianID == 0 ? "Add" : "Edit";
+    string title = action + " Technician";
     ViewData["Title"] = title;
 }
 
-<h1>@ViewData["Title"]</h1>
+<h1>@title</h1>
 
-<form asp-action="Edit" method="post">
+<!-- Use the dynamic action determined above for form submission -->
+<form asp-action="@action" method="post">
     <div asp-validation-summary="All" class="text-danger"></div>
 
     <div class="form-group">
@@ -32,12 +35,12 @@
         <span asp-validation-for="Phone" class="text-danger"></span>
     </div>
 
-    <!-- Hidden field for CustomerID -->
+    <!-- Hidden field for TechnicianID -->
     <input type="hidden" asp-for="TechnicianID" />
     <br>
     <!-- Buttons -->
-    <button type="submit" class="btn btn-primary">@ViewBag.Action</button>
-    <a asp-action="List" class="btn btn-primary">Cancel</a>
+    <button type="submit" class="btn btn-primary">@action</button>
+    <a asp-action="List" class="btn btn-secondary">Cancel</a>
 </form>
 
 @section scripts {

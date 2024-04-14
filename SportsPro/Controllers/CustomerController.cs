@@ -53,7 +53,7 @@ namespace SportsPro.Controllers
         {
             var options = new QueryOptions<Customer>
             {
-                Includes = "Country", // Ensure this is the correct navigation property name
+                Includes = "Country",
                 Where = c => c.CustomerID == id
             };
 
