@@ -24,28 +24,19 @@ using Microsoft.AspNetCore.Mvc;
 using SportsPro.Models;
 using Microsoft.EntityFrameworkCore;
 using SportsPro.ViewModels;
-
+using SportsPro.Data.DataLayer.Repositories;
+using SportsPro.Data.DataLayer;
 
 namespace SportsPro.Controllers
 
 {
     public class IncidentController : Controller
     {
-        private SportsProContext context { get; set; }
-
-        //Include lists of needed objects
-        private List<Product> products;
-        private List<Technician> technicians;
-        private List<Customer> customers;
+        private SportsProUnitOfWork data { get; set; }
 
         public IncidentController(SportsProContext ctx)
         {
-            context = ctx;
-
-            //Populate the lists with data from the database to send to the views
-            products = context.Products.ToList();
-            technicians = context.Technicians.ToList();
-            customers = context.Customers.ToList();
+            data = new SportsProUnitOfWork(ctx);
         }
 
         public IActionResult Index()
@@ -56,54 +47,42 @@ namespace SportsPro.Controllers
         [Route("Incidents")]
         public IActionResult List()
         {
-            // Fetch the incidents from the database
-            var incidents = context.Incidents
-                .Include(i => i.Customer)
-                .Include(i => i.Product)
-                .Include(i => i.Technician)
-                .OrderBy(i => i.IncidentID).ToList();
-
-            // Create an instance of the ViewModel
-            var viewModel = new IncidentListViewModel
+            var options = new QueryOptions<Incident>
             {
-                Incidents = incidents,
-                
-                //Set up filtering structure for later use
-                IncidentFilter = "All",
-
-                // Populated lists for use in filtering
-                Customers = context.Customers.ToList(), 
-                Products = context.Products.ToList(),
-                Technicians = context.Technicians.ToList()
+                Includes = "Customer, Product, Technician",
+                OrderBy = inc => inc.IncidentID
             };
 
-            // Pass the ViewModel to the view
+            var incidents = data.Incidents.List(options);
+            var viewModel = new IncidentListViewModel
+            {
+                Incidents = incidents.ToList(),
+                IncidentFilter = "All",
+                Customers = data.Customers.List(new QueryOptions<Customer>()).ToList(),
+                Products = data.Products.List(new QueryOptions<Product>()).ToList(),
+                Technicians = data.Technicians.List(new QueryOptions<Technician>()).ToList()
+            };
+
             return View(viewModel);
         }
 
         [HttpGet("Incidents/Unassigned")]
         public IActionResult ListUnassigned()
         {
-            var incidents = context.Incidents
-                .Include(i => i.Customer)
-                .Include(i => i.Product)
-                .Include(i => i.Technician)
-                .Where(i => i.TechnicianID == -1)
-                .OrderBy(i => i.IncidentID)
-                .ToList();
-
-            // Prepare the ViewModel for the view
+            var options = new QueryOptions<Incident>
+            {
+                Includes = "Customer, Product, Technician",
+                Where = inc => inc.TechnicianID == -1,
+                OrderBy = inc => inc.IncidentID
+            };
+            var incidents = data.Incidents.List(options);
             var viewModel = new IncidentListViewModel
             {
-                Incidents = incidents,
-
-                //Set up filtering structure for later use
+                Incidents = incidents.ToList(),
                 IncidentFilter = "Unassigned",
-
-                // Populated lists for use in filtering
-                Customers = context.Customers.ToList(),
-                Products = context.Products.ToList(),
-                Technicians = context.Technicians.ToList()
+                Customers = data.Customers.List(new QueryOptions<Customer>()).ToList(),
+                Products = data.Products.List(new QueryOptions<Product>()).ToList(),
+                Technicians = data.Technicians.List(new QueryOptions<Technician>()).ToList()
             };
 
             return View("List", viewModel); // Reuse the List view with the filtered incidents
@@ -112,26 +91,19 @@ namespace SportsPro.Controllers
         [HttpGet("Incidents/Open")]
         public IActionResult ListOpenIncidents()
         {
-            var incidents = context.Incidents
-                .Include(i => i.Customer)
-                .Include(i => i.Product)
-                .Include(i => i.Technician)
-                .Where(i => i.DateClosed == null)
-                .OrderBy(i => i.IncidentID)
-                .ToList();
-
-            // Prepare the ViewModel for the view
+            var options = new QueryOptions<Incident>
+            {
+                Includes = "Customer, Product, Technician",
+                OrderBy = inc => inc.IncidentID
+            };
+            var incidents = data.Incidents.List(options);
             var viewModel = new IncidentListViewModel
             {
-                Incidents = incidents,
-
-                //Set up filtering structure for later use
+                Incidents = incidents.ToList(),
                 IncidentFilter = "Open",
-
-                // Populated lists for use in filtering
-                Customers = context.Customers.ToList(),
-                Products = context.Products.ToList(),
-                Technicians = context.Technicians.ToList()
+                Customers = data.Customers.List(new QueryOptions<Customer>()).ToList(),
+                Products = data.Products.List(new QueryOptions<Product>()).ToList(),
+                Technicians = data.Technicians.List(new QueryOptions<Technician>()).ToList()
             };
 
             return View("List", viewModel); // Reuse the List view with the filtered incidents
@@ -140,16 +112,14 @@ namespace SportsPro.Controllers
         [HttpGet]
         public IActionResult Add()
         {
-            // Display the Add/Edit Incident page with blank fields
             var viewModel = new IncidentAddEditViewModel
             {
                 OperationType = "Add",
-                Customers = customers,
-                Technicians = technicians,
-                Products = products,
+                Customers = data.Customers.List(new QueryOptions<Customer>()).ToList(),
+                Technicians = data.Technicians.List(new QueryOptions<Technician>()).ToList(),
+                Products = data.Products.List(new QueryOptions<Product>()).ToList(),
                 CurrentIncident = new Incident()
             };
-
 
             return View("Edit", viewModel);
         }
@@ -157,28 +127,22 @@ namespace SportsPro.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            var technicianSignedIn = HttpContext.Session.GetString("TechnicianName");
+            var options = new QueryOptions<Incident>
+            {
+                Includes = "Customer, Product, Technician",
+                Where = inc => inc.IncidentID == id
+            };
 
-            //Check if the user is a technician
-            var level = technicianSignedIn == null ? "Admin" : "Technician";
+            var incident = data.Incidents.Get(options);
 
-            var incident = context.Incidents
-                .Include(c => c.Customer)
-                .Include(c => c.Technician)
-                .Include(c => c.Product)
-                .FirstOrDefault(c => c.IncidentID == id);
-
-            //Add the lists to the ViewModel and send to the View
             var viewModel = new IncidentAddEditViewModel
             {
                 OperationType = "Edit",
-                AccessLevel = level,
-                Customers = customers,
-                Technicians = technicians,
-                Products = products,
+                Customers = data.Customers.List(new QueryOptions<Customer>()).ToList(),
+                Technicians = data.Technicians.List(new QueryOptions<Technician>()).ToList(),
+                Products = data.Products.List(new QueryOptions<Product>()).ToList(),
                 CurrentIncident = incident
             };
-
 
             return View("Edit", viewModel);
         }
@@ -186,56 +150,36 @@ namespace SportsPro.Controllers
         [HttpPost]
         public IActionResult Edit(IncidentAddEditViewModel viewModel)
         {
-            // Get the selected technician from session state if there is one
-            var technicianSignedIn = HttpContext.Session.GetInt32("SelectedTechnicianId") ?? 0;
-
-            // If the user is a technician, update the incident and redirect to the ListByTechnician action
-            if (technicianSignedIn != 0)
-            {
-                var incident = context.Incidents.Find(viewModel.CurrentIncident.IncidentID);
-                incident.Description = viewModel.CurrentIncident.Description;
-                incident.DateClosed = viewModel.CurrentIncident.DateClosed;
-
-                context.SaveChanges();
-
-                return RedirectToAction("ListByTechnician");
-            }
-
-            // Handle the form submission for adding/editing incidents
             if (ModelState.IsValid)
             {
-                //Get current incident from the viewModel
                 if (viewModel.CurrentIncident.IncidentID == 0)
                 {
-                    context.Incidents.Add(viewModel.CurrentIncident);
+                    data.Incidents.Insert(viewModel.CurrentIncident);
                 }
                 else
                 {
-                    context.Incidents.Update(viewModel.CurrentIncident);
+                    data.Incidents.Update(viewModel.CurrentIncident);
                 }
-
-                context.SaveChanges();
-
+                data.Save();
                 return RedirectToAction("List");
             }
-            else
+
+            viewModel = new IncidentAddEditViewModel
             {
-                viewModel.OperationType = viewModel.CurrentIncident.IncidentID == 0 ? "Add" : "Edit";
-
-                // Repopulate lists if validation fails
-                viewModel.Customers = customers; 
-                viewModel.Technicians = technicians;
-                viewModel.Products = products;
-
-                return View("Edit", viewModel);
-            }
+                OperationType = "Add",
+                Customers = data.Customers.List(new QueryOptions<Customer>()).ToList(),
+                Technicians = data.Technicians.List(new QueryOptions<Technician>()).ToList(),
+                Products = data.Products.List(new QueryOptions<Product>()).ToList(),
+                CurrentIncident = new Incident()
+            };
+            return View("Edit", viewModel);
         }
 
         [HttpGet]
         public IActionResult Delete(int id)
         {
             // Display the Delete Incident page that confirms the deletion
-            var incident = context.Incidents.Find(id);
+            var incident = data.Incidents.Get(id);
             return View(incident);
         }
 
@@ -243,8 +187,8 @@ namespace SportsPro.Controllers
         public IActionResult Delete(Incident incident)
         {
             // Handle the form submission for deleting incidents
-            context.Incidents.Remove(incident);
-            context.SaveChanges();
+            data.Incidents.Delete(incident);
+            data.Save();
             return RedirectToAction("List", "Incident");
         }
 
@@ -255,7 +199,7 @@ namespace SportsPro.Controllers
         {
             var model = new TechnicianViewModel()
             {
-                Technicians = context.Technicians.ToList()
+                Technicians = data.Technicians.List(new QueryOptions<Technician>()).ToList()
             };
 
             return View(model);
@@ -267,13 +211,13 @@ namespace SportsPro.Controllers
         public IActionResult GetTechnician(TechnicianViewModel model)
         {
             // Attempt to retrieve the technician from the database
-            var technician = context.Technicians.Find(model.SelectedTechnicianId);
+            var technician = data.Technicians.Get(model.SelectedTechnicianId);
 
             // Save the technician in session state if it exists
             if (technician != null)
             {
                 HttpContext.Session.SetInt32("SelectedTechnicianId", model.SelectedTechnicianId);
-                HttpContext.Session.SetString("TechnicianName", context.Technicians.Find(model.SelectedTechnicianId).Name);
+                HttpContext.Session.SetString("TechnicianName", data.Technicians.Get(model.SelectedTechnicianId).Name);
             }
 
 
@@ -296,23 +240,21 @@ namespace SportsPro.Controllers
             }
             ViewBag.TechnicianName = HttpContext.Session.GetString("TechnicianName");
 
-            // Fetch the incidents from the database that are still open
-            var incidents = context.Incidents
-                .Include(i => i.Customer)
-                .Include(i => i.Product)
-                .Include(i => i.Technician)
-                .Where(i => i.Technician.TechnicianID == id && i.DateClosed == null)
-                .OrderBy(i => i.IncidentID)
-                .ToList();
-
-            // Create an instance of the ViewModel
-            var viewModel = new IncidentListViewModel
+            var options = new QueryOptions<Incident>
             {
-                Incidents = incidents,
-                IncidentFilter = "Technician",
-                Customers = context.Customers.ToList(),
-                Products = context.Products.ToList(),
-                Technicians = context.Technicians.ToList()
+                Includes = "Customer, Product, Technician",
+                Where = inc => inc.TechnicianID == id
+            };
+
+            var incident = data.Incidents.Get(options);
+
+            var viewModel = new IncidentAddEditViewModel
+            {
+                OperationType = "Edit",
+                Customers = data.Customers.List(new QueryOptions<Customer>()).ToList(),
+                Technicians = data.Technicians.List(new QueryOptions<Technician>()).ToList(),
+                Products = data.Products.List(new QueryOptions<Product>()).ToList(),
+                CurrentIncident = incident
             };
 
             // Pass the ViewModel to the view
