@@ -1,25 +1,18 @@
-﻿/*
- * Jason Nelson
- * 01/19/2024
- * Controller for the product portion of the SportsPro application
- * 
- * Jason Nelson
- * 02/06/2024
- * Used ViewResult and RedirectToActionResult, also added TempData message for when a product
- * has been added, edited, or deleted.
- */
-
-
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using SportsPro.Data.DataLayer.Repositories;
 using SportsPro.Models;
+using SportsPro.Data.DataLayer;
 
 namespace SportsPro.Controllers
 {
     public class ProductController : Controller
     {
-        private SportsProContext context { get; set; }
+        private readonly IRepository<Product> _productRepository;
 
-        public ProductController(SportsProContext ctx) => context = ctx;
+        public ProductController(IRepository<Product> productRepository)
+        {
+            _productRepository = productRepository;
+        }
 
         public RedirectToActionResult Index()
         {
@@ -29,7 +22,7 @@ namespace SportsPro.Controllers
         [Route("products")]
         public ViewResult List()
         {
-            var products = context.Products.OrderBy(p => p.ReleaseDate).ToList();
+            var products = _productRepository.List(new QueryOptions<Product> { OrderBy = p => p.ReleaseDate });
             return View(products);
         }
 
@@ -44,7 +37,7 @@ namespace SportsPro.Controllers
         public ViewResult Edit(int id)
         {
             ViewBag.Action = "Edit";
-            var product = context.Products.Find(id);
+            var product = _productRepository.Get(id);
             return View(product);
         }
 
@@ -55,14 +48,14 @@ namespace SportsPro.Controllers
             {
                 if (product.ProductID == 0)
                 {
-                    context.Products.Add(product);
-                    context.SaveChanges();
+                    _productRepository.Insert(product);
+                    _productRepository.Save();
                     TempData["UserMessage"] = product.Name + " was added.";
                 }
                 else
                 {
-                    context.Update(product);
-                    context.SaveChanges();
+                    _productRepository.Update(product);
+                    _productRepository.Save();
                     TempData["UserMessage"] = product.Name + " was edited.";
                 }
                 return RedirectToAction("List", "Product");
@@ -77,15 +70,15 @@ namespace SportsPro.Controllers
         [HttpGet]
         public ViewResult Delete(int id)
         {
-            var product = context.Products.Find(id);
+            var product = _productRepository.Get(id);
             return View(product);
         }
 
         [HttpPost]
         public IActionResult Delete(Product product)
         {
-            context.Products.Remove(product);
-            context.SaveChanges();
+            _productRepository.Delete(product);
+            _productRepository.Save();
             TempData["UserMessage"] = "Product deleted";
             return RedirectToAction("List", "Product");
         }
