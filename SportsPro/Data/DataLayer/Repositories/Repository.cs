@@ -45,6 +45,8 @@ namespace SportsPro.Data.DataLayer.Repositories
             {
                 if (options.OrderByDirection == "asc")
                     query = query.OrderBy(options.OrderBy);
+                else if (options.OrderByDirection == "desc")
+                    query = query.OrderByDescending(options.OrderBy);
                 else
                     query = query.OrderByDescending(options.OrderBy);
             }
