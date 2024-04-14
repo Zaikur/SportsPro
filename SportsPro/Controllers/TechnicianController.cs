@@ -2,6 +2,10 @@
  * Quinton Nelson 
  * 1/21/2023
  * Controller for the technician portion of the application
+ * 
+ * Jason Nelson
+ * 04/14/2024
+ * modified controller to incorporate data encapsulation
  */
 
 using Microsoft.AspNetCore.Mvc;

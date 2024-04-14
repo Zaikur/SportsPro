@@ -1,4 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿/*
+ * Jason Nelson
+ * 04/14/2024
+ * Added Repository class for data encapsulation
+ */
+
+using Microsoft.EntityFrameworkCore;
 using SportsPro.Models;
 using System.Linq.Expressions;
 

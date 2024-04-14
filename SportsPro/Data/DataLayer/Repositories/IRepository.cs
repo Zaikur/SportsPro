@@ -1,4 +1,10 @@
-﻿namespace SportsPro.Data.DataLayer.Repositories
+﻿/*
+ * Jason Nelson
+ * 04/14/2024
+ * Added Repository interface for data encapsulation
+ */
+
+namespace SportsPro.Data.DataLayer.Repositories
 {
     public interface IRepository<T> where T : class
     {
