@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SportsPro.Models;
 using SportsPro.Data.Configuration;
 
 namespace SportsPro.Data.DataLayer
@@ -7,12 +8,12 @@ namespace SportsPro.Data.DataLayer
     {
         public SportsProContext(DbContextOptions<SportsProContext> options) : base(options) { }
 
-        public DbSet<Models.Customer> Customers { get; set; }
-        public DbSet<Models.Incident> Incidents { get; set; }
-        public DbSet<Models.Product> Products { get; set; }
-        public DbSet<Models.Registration> Registrations { get; set; }
-        public DbSet<Models.Technician> Technicians { get; set; }
-        public DbSet<Models.Country> Countries { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<Incident> Incidents { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Registration> Registrations { get; set; }
+        public DbSet<Technician> Technicians { get; set; }
+        public DbSet<Country> Countries { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
