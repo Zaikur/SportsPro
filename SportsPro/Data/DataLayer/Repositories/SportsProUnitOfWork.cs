@@ -1,4 +1,7 @@
-﻿namespace SportsPro.Data.DataLayer.Repositories
+﻿using SportsPro.Models;
+
+
+namespace SportsPro.Data.DataLayer.Repositories
 {
     public class SportsProUnitOfWork : ISportsProUnitOfWork
     {
