@@ -4,7 +4,7 @@ using SportsPro.Models;
 
 namespace SportsPro.Data.Configuration
 {
-    public class ProductConfiguration : IEntityTypeConfiguration<Product>
+    public class ProductConfig : IEntityTypeConfiguration<Product>
     {
         public void Configure(EntityTypeBuilder<Product> builder)
         {
