@@ -1,4 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿/* Ayden Hofts
+ * 04/14/2024
+ * Modifyed the ProductController to use the IRepository to grab the data.
+ */
+
+
+
+using Microsoft.AspNetCore.Mvc;
 using SportsPro.Data.DataLayer.Repositories;
 using SportsPro.Models;
 using SportsPro.Data.DataLayer;

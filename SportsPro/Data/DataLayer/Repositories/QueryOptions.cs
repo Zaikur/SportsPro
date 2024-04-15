@@ -1,4 +1,10 @@
-﻿using System;
+﻿/* Ayden Hofts
+ * 04/14/2024
+ * This class contains the Query Options used to implement the repository pattern.
+ */
+
+
+using System;
 using System.Linq.Expressions;
 
 namespace SportsPro.Data.DataLayer
